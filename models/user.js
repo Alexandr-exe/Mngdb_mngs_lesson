@@ -23,6 +23,22 @@ const userSchema = new mongoose.Schema({
     },
     required: true,
   },
+  email: {
+    type: String,
+    unique: true,
+    validate: {
+      validator(email) {
+        return validator.isEmail(email);
+      },
+      required: true,
+    },
+  },
+  password: {
+    type: String,
+    required: true,
+    validate: /[A-Za-z0-9\W]+/,
+    minlength: 8,
+  },
 },
 {
   versionKey: false,

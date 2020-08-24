@@ -28,11 +28,6 @@ async function start() {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  req.user = { _id: '5f2fc839e47a9c32d89d96d8' };
-  next();
-});
-
 app.use('/users', users);
 app.use('/cards', cards);
 app.use((req, res) => {
