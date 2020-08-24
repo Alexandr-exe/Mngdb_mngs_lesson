@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const Users = require('../models/user');
 
 const getUsers = (req, res) => {
@@ -26,17 +27,28 @@ const findUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  Users.create({ name, about, avatar })
+  const {
+    name, about, avatar, email,
+  } = req.body;
+
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => Users.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    }))
     .then((user) => {
-      res.send({ user });
+      res.status(201).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Неверно сформирован запрос ' });
-        return;
-      }
-      res.status(500).send({ message: err.message });
+      res.status(400).send(err);
     });
 };
 
