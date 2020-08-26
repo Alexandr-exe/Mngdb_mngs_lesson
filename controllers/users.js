@@ -28,10 +28,9 @@ const findUser = (req, res) => {
 
 const createUser = (req, res) => {
   const {
-    name, about, avatar, email,
+    name, about, avatar, email, password,
   } = req.body;
-
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(password, 10)
     .then((hash) => Users.create({
       name,
       about,
@@ -48,7 +47,7 @@ const createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(400).send(err);
+      res.status(400).send({ message: err });
     });
 };
 

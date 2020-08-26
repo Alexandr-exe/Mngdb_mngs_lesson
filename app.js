@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const { login, createUser } = require('./controllers/users');
 const users = require('./routes/users');
 const cards = require('./routes/cards');
 
@@ -28,8 +29,12 @@ async function start() {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.post('/signin', login);
+app.post('/signup', createUser);
+
 app.use('/users', users);
 app.use('/cards', cards);
+
 app.use((req, res) => {
   res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
 });
